@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Speedometer</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #111;
+      color: #0f0;
+      flex-direction: column;
+    }
+    h1 {
+      font-size: 2em;
+      margin: 0.5em 0;
+    }
+    #speed {
+      font-size: 5em;
+      font-weight: bold;
+    }
+    #units {
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Your Speed</h1>
+  <div id="speed">0</div>
+  <div id="units">km/h</div>
+
+  <script>
+    const speedDisplay = document.getElementById("speed");
+
+    if ("geolocation" in navigator) {
+      navigator.geolocation.watchPosition(
+        (position) => {
+          const speedMps = position.coords.speed; // meters per second
+          let speed = 0;
+          if (speedMps !== null) {
+            speed = (speedMps * 3.6).toFixed(1); // km/h
+          }
+          speedDisplay.textContent = speed;
+        },
+        (error) => {
+          alert("Error getting GPS data: " + error.message);
+        },
+        {
+          enableHighAccuracy: true,
+          maximumAge: 1000
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by your browser.");
+    }
+  </script>
+</body>
+</html>
